@@ -902,6 +902,22 @@
       scroll-snap-align: start;
     }
 
+    #bg3d {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.32;
+    }
+
+    .bg-mask {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 179, 0, 0.1), transparent 35%), radial-gradient(circle at 80% 0%, rgba(0, 137, 123, 0.18), transparent 30%), linear-gradient(145deg, #1b222a 0%, #0f1419 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
     @keyframes bg-pan {
       0% { background-position: 0% 40%; }
       50% { background-position: 80% 60%; }
@@ -919,7 +935,6 @@
 
     @media (max-width: 720px) {
       body { padding: 22px 14px 48px; }
-      .hero p { font-size: 14px; }
       .phone { width: 100%; }
       .device-grid { grid-template-columns: 1fr; }
       .sheet .row { flex-direction: column; align-items: flex-start; }
@@ -928,11 +943,12 @@
   </style>
 </head>
 <body>
+  <div id="bg3d"></div>
+  <div class="bg-mask"></div>
   <header class="hero">
     <div class="hero-content">
       <div class="badge">Academic Warmth & Modern Contrast · Mobile-first</div>
       <h1>İYTE Yolculuk · Mobil UI Konsepti</h1>
-      <p>Modern, sıcak ve güven veren bir kampüs paylaşımlı yolculuk deneyimi. Renk paleti: Amber (#FFB300), Petrol (#00897B), Antrasit (#263238), Krem (#F5F5F6). Aşağıdaki maketler React Native tarzı bileşen hiyerarşisiyle, web üzerinde mobil ekran duyarlılığı korunarak oluşturuldu.</p>
     </div>
   </header>
 
@@ -1226,5 +1242,6 @@
   </main>
 
   <script src="app.js"></script>
+  <script type="module" src="three-bg.js"></script>
 </body>
 </html>
