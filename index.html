@@ -720,6 +720,22 @@
       animation: float 3.6s ease-in-out infinite;
     }
 
+    .car-3d {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      width: 130px;
+      height: 88px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.26);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
     .sheet {
       background: var(--cream);
       border-radius: var(--radius-lg);
@@ -1228,6 +1244,7 @@
               <text x="62" y="344" fill="#d1e7e4" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Gülbahçe Meydan</text>
               <text x="278" y="96" fill="#ffe7b3" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Mühendislik</text>
             </svg>
+            <div class="car-3d" data-color="#ffb300"></div>
             <div class="car" id="car">MY</div>
           </div>
           <div class="sheet">
@@ -1250,5 +1267,6 @@
 
   <script src="app.js"></script>
   <script type="module" src="three-bg.js"></script>
+  <script type="module" src="car-3d.js"></script>
 </body>
 </html>
