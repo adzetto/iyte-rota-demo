@@ -43,6 +43,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Search filter
+  const searchInput = document.getElementById('searchInput');
+  const rideList = document.getElementById('rideList');
+  if (searchInput && rideList) {
+    const filter = () => {
+      const q = searchInput.value.trim().toLowerCase();
+      rideList.querySelectorAll('.ride-card').forEach((card) => {
+        const text = `${card.dataset.route || ''} ${card.dataset.driver || ''}`;
+        const match = text.includes(q);
+        card.style.display = match ? '' : 'none';
+      });
+    };
+    searchInput.addEventListener('input', filter);
+  }
+
+  // Bottom sheet toggle (live map)
+  const liveSheet = document.getElementById('liveSheet');
+  if (liveSheet) {
+    const handle = liveSheet.querySelector('.handle');
+    const toggle = () => {
+      liveSheet.classList.toggle('collapsed');
+    };
+    if (handle) handle.addEventListener('click', toggle);
+  }
+
   // Time slider -> human readable time
   const slider = document.getElementById('timeSlider');
   const timeValue = document.getElementById('timeValue');

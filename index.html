@@ -744,6 +744,8 @@
       position: relative;
       margin-top: auto;
       box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.18);
+      transition: transform 240ms ease, box-shadow 240ms ease;
+      transform: translateY(0);
     }
 
     .sheet .handle {
@@ -784,6 +786,11 @@
       background: rgba(0, 137, 123, 0.06);
       font-weight: 700;
       cursor: pointer;
+    }
+
+    .sheet.collapsed {
+      transform: translateY(55%);
+      box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.08);
     }
 
     .dark-screen {
@@ -1056,7 +1063,9 @@
             <button class="active" data-mode="yolcu">Yolcu</button>
             <button data-mode="surucu">Sürücü</button>
           </div>
-          <div class="search">🔍 Nereye gidiyorsun?</div>
+          <div class="search">
+            <input id="searchInput" type="text" placeholder="🔍 Nereye gidiyorsun?" style="border:none;outline:none;width:100%;background:transparent;font-weight:600;font-size:14px;color:var(--muted);" />
+          </div>
           <div class="chip-row">
             <div class="chip">Ev → Kampüs</div>
             <div class="chip">Gülbahçe Meydan</div>
@@ -1065,8 +1074,8 @@
           <div class="tab-sections">
             <div class="panel active" data-tab="home">
               <div class="section-title">Yaklaşan Yolculuklar</div>
-              <div class="cards">
-                <div class="ride-card">
+              <div class="cards" id="rideList">
+                <div class="ride-card" data-route="gülbahçe meydan i̇yte kütüphane" data-driver="mehmet y">
                   <div class="ride-time">08:45</div>
                   <div class="timeline">
                     <span>Gülbahçe Meydan</span>
@@ -1081,7 +1090,7 @@
                     <button class="btn btn-primary btn-small book-btn">İstek Gönder</button>
                   </div>
                 </div>
-                <div class="ride-card">
+                <div class="ride-card" data-route="urla sahil i̇yte mühendislik" data-driver="deniz z">
                   <div class="ride-time">09:10</div>
                   <div class="timeline">
                     <span>Urla Sahil</span>
@@ -1247,7 +1256,7 @@
             <div class="car-3d" data-color="#ffb300"></div>
             <div class="car" id="car">MY</div>
           </div>
-          <div class="sheet">
+          <div class="sheet collapsed" id="liveSheet">
             <div class="handle"></div>
             <div class="row">
               <div class="driver-info">
