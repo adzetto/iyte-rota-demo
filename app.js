@@ -205,4 +205,156 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     requestAnimationFrame(animateCar);
   }
+
+  // Map Pin Interactivity
+  const mapPins = document.querySelectorAll('.map-pin');
+  if (mapPins.length > 0 && liveSheet) {
+    const driverInfo = liveSheet.querySelector('.driver-info strong');
+    const driverSub = liveSheet.querySelector('.driver-info span');
+
+    mapPins.forEach(pin => {
+      pin.addEventListener('click', () => {
+        const loc = pin.dataset.loc;
+        const info = pin.dataset.info;
+
+        // Update sheet info
+        if (driverInfo) driverInfo.textContent = `${loc}`;
+        if (driverSub) driverSub.textContent = info;
+
+        // Open sheet if collapsed
+        liveSheet.classList.remove('collapsed');
+      });
+    });
+  }
+
+  // Driver Publish Flow Simulation
+  const publishBtn = document.getElementById('publishBtn');
+  const driverWaitingView = document.getElementById('driverWaitingView');
+  const requestsContainer = document.getElementById('requestsContainer');
+  const cancelRideBtn = document.getElementById('cancelRideBtn');
+  const formCard = document.querySelector('.form-card'); // The form to hide
+
+  if (publishBtn && driverWaitingView && requestsContainer) {
+    publishBtn.addEventListener('click', () => {
+      // Hide form, show waiting
+      if (formCard) formCard.style.display = 'none';
+      publishBtn.style.display = 'none';
+      driverWaitingView.classList.add('active');
+
+      // Simulate incoming request after 3 seconds
+      setTimeout(() => {
+        const reqId = Date.now();
+        const reqHTML = `
+          <div class="request-card" id="req-${reqId}">
+            <div class="mini-avatar" style="background:#e0f7fa; color:#006064;">AL</div>
+            <div style="flex:1">
+              <div style="font-weight:700; color:var(--anthracite)">Ali K.</div>
+              <div style="font-size:12px; color:var(--muted)">Mühendislik Fak.</div>
+            </div>
+            <div class="request-actions">
+              <button class="btn-icon btn-decline" onclick="this.closest('.request-card').remove()">✕</button>
+              <button class="btn-icon btn-accept" onclick="acceptRequest('${reqId}')">✓</button>
+            </div>
+          </div>
+        `;
+        requestsContainer.insertAdjacentHTML('beforeend', reqHTML);
+
+        // Trigger animation
+        setTimeout(() => {
+          const el = document.getElementById(`req-${reqId}`);
+          if (el) el.classList.add('show');
+        }, 50);
+
+      }, 2500);
+    });
+
+    if (cancelRideBtn) {
+      cancelRideBtn.addEventListener('click', () => {
+        driverWaitingView.classList.remove('active');
+        if (formCard) formCard.style.display = 'grid';
+        publishBtn.style.display = 'inline-flex';
+        requestsContainer.innerHTML = ''; // Clear requests
+      });
+    }
+  }
+
+  // Global helper for accept button (since it's injected HTML)
+  window.acceptRequest = (id) => {
+    const card = document.getElementById(`req-${id}`);
+    if (card) {
+      card.innerHTML = `
+        <div style="color:#2e7d32; font-weight:700; display:flex; align-items:center; gap:8px;">
+          <span>✓</span> Ali K. kabul edildi
+        </div>
+      `;
+      card.style.background = "#e8f5e9";
+      card.style.borderColor = "#c8e6c9";
+
+      // Update seat count visually
+      const seatVal = document.getElementById('seatValue');
+      if (seatVal) {
+        let current = parseInt(seatVal.textContent);
+        if (current > 0) seatVal.textContent = current - 1;
+      }
+    }
+  };
+
+  // Chat Interface Logic
+  const chatView = document.getElementById('chatView');
+  const openChatBtns = document.querySelectorAll('button'); // We need to find the specific chat button
+  const closeChatBtn = document.getElementById('closeChatBtn');
+  const chatInput = document.getElementById('chatInput');
+  const chatSendBtn = document.getElementById('chatSendBtn');
+  const chatMessages = document.getElementById('chatMessages');
+
+  // Find the "Mesaj" button in the bottom sheet
+  if (liveSheet) {
+    const msgBtn = Array.from(liveSheet.querySelectorAll('button')).find(b => b.textContent.includes('Mesaj'));
+    if (msgBtn && chatView) {
+      msgBtn.addEventListener('click', () => {
+        chatView.classList.add('active');
+      });
+    }
+  }
+
+  if (closeChatBtn && chatView) {
+    closeChatBtn.addEventListener('click', () => {
+      chatView.classList.remove('active');
+    });
+  }
+
+  const sendMessage = () => {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    // Add user message
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble sent';
+    bubble.textContent = text;
+    chatMessages.appendChild(bubble);
+    chatInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Simulate reply
+    setTimeout(() => {
+      const reply = document.createElement('div');
+      reply.className = 'message-bubble received';
+      const replies = [
+        "Tamamdır, bekliyorum.",
+        "Konumun doğru mu?",
+        "Geliyorum!",
+        "👍"
+      ];
+      reply.textContent = replies[Math.floor(Math.random() * replies.length)];
+      chatMessages.appendChild(reply);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1500);
+  };
+
+  if (chatSendBtn && chatInput) {
+    chatSendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  }
 });
