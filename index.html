@@ -10,17 +10,18 @@
   <style>
     :root {
       --amber: #ffb300;
-      --amber-strong: #f7a000;
+      --amber-strong: #ff8f00; /* Richer amber */
       --teal: #00897b;
-      --teal-soft: #5ab3a4;
+      --teal-soft: #4db6ac;
       --anthracite: #263238;
-      --anthracite-soft: #2f3b46;
-      --cream: #f5f5f6;
-      --cream-strong: #ededf0;
-      --muted: #6f7a85;
-      --shadow: 0 20px 60px rgba(17, 19, 23, 0.35);
-      --radius-lg: 28px;
-      --radius-md: 18px;
+      --anthracite-soft: #37474f;
+      --cream: rgba(245, 245, 246, 0.85); /* Translucent for glassmorphism */
+      --cream-strong: #ececf0;
+      --muted: #546e7a;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+      --radius-lg: 32px;
+      --radius-md: 20px;
     }
 
     * { box-sizing: border-box; }
@@ -121,10 +122,12 @@
     .phone {
       width: min(440px, 100%);
       background: var(--cream);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: var(--radius-lg);
-      padding: 22px 18px 20px;
-      box-shadow: var(--shadow), 0 12px 30px rgba(0, 0, 0, 0.28);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 24px 20px;
+      box-shadow: var(--shadow), 0 8px 24px rgba(0,0,0,0.1);
+      border: var(--glass-border);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -737,9 +740,11 @@
     }
 
     .sheet {
-      background: var(--cream);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
-      padding: 14px;
+      padding: 20px;
       border: 1px solid var(--cream-strong);
       position: relative;
       margin-top: auto;

@@ -1,4 +1,5 @@
 // Basic UI interactions and micro-animations
+// Basic UI interactions and micro-animations
 document.addEventListener('DOMContentLoaded', () => {
   // Intersection observer to reveal phones on scroll
   const animated = document.querySelectorAll('[data-animate]');
@@ -117,19 +118,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const car = document.getElementById('car');
   const path = document.getElementById('routePath');
   if (car && path) {
+    let startTime = null;
+    const duration = 9000; // 9s loop
     const length = path.getTotalLength();
-    const animateCar = () => {
-      const now = performance.now();
-      const cycle = (now % 9000) / 9000; // 9s loop
-      const distance = length * cycle;
-      const point = path.getPointAtLength(distance);
-      // convert SVG coords (viewBox 360x420) to %
+    
+    const animateCar = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const cycle = (elapsed % duration) / duration;
+      
+      // Get point at current length
+      const point = path.getPointAtLength(length * cycle);
+      
+      // SVG viewBox is 360x420. Convert to percentage for CSS positioning
+      // This assumes the SVG scales uniformly within its container
       const xPct = (point.x / 360) * 100;
       const yPct = (point.y / 420) * 100;
+      
       car.style.left = `${xPct}%`;
       car.style.top = `${yPct}%`;
+      
       requestAnimationFrame(animateCar);
     };
-    animateCar();
+    requestAnimationFrame(animateCar);
   }
 });
