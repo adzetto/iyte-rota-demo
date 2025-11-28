@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İYTE Yolculuk UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --amber: #ffb300;
+      --amber-strong: #f7a000;
+      --teal: #00897b;
+      --teal-soft: #5ab3a4;
+      --anthracite: #263238;
+      --anthracite-soft: #2f3b46;
+      --cream: #f5f5f6;
+      --cream-strong: #ededf0;
+      --muted: #6f7a85;
+      --shadow: 0 20px 60px rgba(17, 19, 23, 0.35);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 179, 0, 0.1), transparent 35%), radial-gradient(circle at 80% 0%, rgba(0, 137, 123, 0.18), transparent 30%), linear-gradient(145deg, #1b222a 0%, #0f1419 100%);
+      background-size: 140% 140%;
+      animation: bg-pan 26s ease-in-out infinite;
+      color: var(--anthracite);
+      min-height: 100vh;
+      padding: 32px 18px 64px;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto 28px;
+      color: #e9ebf0;
+      display: grid;
+      gap: 12px;
+      align-items: center;
+      grid-template-columns: 1fr;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: -40px -80px 0 -80px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 179, 0, 0.12), transparent 45%), radial-gradient(circle at 70% 0%, rgba(0, 137, 123, 0.16), transparent 40%);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content { position: relative; z-index: 1; display: grid; gap: 12px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 179, 0, 0.16);
+      color: #ffce56;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      justify-content: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #cfd5dd;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 780px;
+      justify-self: center;
+    }
+
+    .canvas {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .device-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      justify-items: center;
+      position: relative;
+    }
+
+    .glow {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .glow.a { background: rgba(255, 179, 0, 0.26); left: -40px; top: 10%; }
+    .glow.b { background: rgba(0, 137, 123, 0.26); right: -60px; bottom: 6%; }
+
+    .phone {
+      width: min(360px, 100%);
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px 16px;
+      box-shadow: var(--shadow), 0 12px 30px rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transform: translateY(36px) scale(0.98);
+      opacity: 0;
+      transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease;
+    }
+
+    .phone.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .phone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.22), rgba(0, 137, 123, 0.22));
+      mask:
+        linear-gradient(#000, #000) content-box,
+        linear-gradient(#000, #000);
+      -webkit-mask:
+        linear-gradient(#000, #000) content-box,
+        linear-gradient(#000, #000);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      pointer-events: none;
+    }
+
+    .phone-body {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .status-dots {
+      display: flex;
+      gap: 6px;
+      padding: 2px 0 4px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--anthracite);
+      opacity: 0.2;
+    }
+
+    .dot.active { opacity: 0.8; background: var(--amber); }
+    .dot.teal { background: var(--teal); opacity: 0.7; }
+
+    .logo-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.15), rgba(255, 255, 255, 0.1));
+      border: 1px solid rgba(255, 179, 0, 0.2);
+      display: grid;
+      place-items: center;
+      color: var(--amber);
+      font-weight: 700;
+      font-size: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-mark::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 35% 35%, rgba(255, 179, 0, 0.32), transparent 55%);
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #fff;
+    }
+
+    .title h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #cfd5dd;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      color: #dfe4ea;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .field label {
+      font-size: 13px;
+      letter-spacing: 0.01em;
+      color: #b8c1cc;
+    }
+
+    .field input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: none;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--amber), var(--amber-strong));
+      color: var(--anthracite);
+      box-shadow: 0 12px 26px rgba(255, 179, 0, 0.35);
+    }
+
+    .btn-ghost {
+      background: rgba(0, 137, 123, 0.08);
+      color: var(--teal);
+      border: 1px solid rgba(0, 137, 123, 0.16);
+      font-weight: 600;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .greet {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      color: var(--anthracite);
+    }
+
+    .greet h3 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -0.01em;
+    }
+
+    .greet span { color: var(--muted); font-size: 13px; }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.2), rgba(0, 137, 123, 0.18));
+      display: grid;
+      place-items: center;
+      color: var(--anthracite);
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar .star {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      background: var(--amber);
+      color: var(--anthracite);
+      font-size: 11px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+      font-weight: 700;
+    }
+
+    .toggle {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 6px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      border: 1px solid var(--cream-strong);
+    }
+
+    .toggle button {
+      border: none;
+      background: transparent;
+      border-radius: 12px;
+      padding: 10px 8px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .toggle button.active {
+      background: var(--amber);
+      color: var(--anthracite);
+      box-shadow: 0 8px 18px rgba(255, 179, 0, 0.3);
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #fff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--cream-strong);
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      background: rgba(0, 137, 123, 0.08);
+      color: var(--teal);
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid rgba(0, 137, 123, 0.14);
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ride-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      border: 1px solid var(--cream-strong);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 10px 24px rgba(17, 19, 23, 0.06);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .ride-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 32px rgba(17, 19, 23, 0.12);
+    }
+
+    .ride-time {
+      color: var(--anthracite);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 16px;
+      display: grid;
+      gap: 6px;
+      color: var(--anthracite);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--amber), var(--teal));
+      border-radius: 999px;
+    }
+
+    .timeline span {
+      position: relative;
+    }
+
+    .timeline span::before {
+      content: '';
+      position: absolute;
+      left: -14px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--amber);
+    }
+
+    .driver {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--anthracite);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .driver .mini-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.16), rgba(0, 137, 123, 0.18));
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 137, 123, 0.08);
+      color: var(--teal);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      border: 1px solid rgba(0, 137, 123, 0.18);
+    }
+
+    .action-col {
+      display: grid;
+      gap: 8px;
+      justify-items: end;
+    }
+
+    .btn-small {
+      padding: 10px 12px;
+      font-size: 13px;
+      min-width: 120px;
+    }
+
+    .tabbar {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: #fff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--cream-strong);
+      overflow: hidden;
+    }
+
+    .tabbar button {
+      border: none;
+      background: transparent;
+      padding: 12px 10px;
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tabbar button.active {
+      color: var(--anthracite);
+      background: rgba(255, 179, 0, 0.22);
+    }
+
+    .tab-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      background: var(--cream-strong);
+    }
+
+    .tabbar button.active .tab-icon { background: var(--amber); }
+
+    .section-title {
+      margin: 6px 0 2px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      border: 1px solid var(--cream-strong);
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.06);
+    }
+
+    .input-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .input-row label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .input-shell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--cream-strong);
+      background: var(--cream);
+      color: var(--anthracite);
+      font-weight: 600;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    .input-shell:focus-within {
+      border-color: rgba(0, 137, 123, 0.8);
+      box-shadow: 0 10px 24px rgba(0, 137, 123, 0.12);
+    }
+
+    .input-shell input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0, 137, 123, 0.08);
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .time-picker {
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.12), rgba(0, 137, 123, 0.08));
+      border-radius: var(--radius-md);
+      padding: 14px;
+      border: 1px solid rgba(255, 179, 0, 0.3);
+      display: grid;
+      gap: 10px;
+    }
+
+    .time-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--amber-strong);
+      letter-spacing: 0.02em;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--amber);
+    }
+
+    .seat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--cream);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--cream-strong);
+    }
+
+    .seat-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seat-actions button {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(38, 50, 56, 0.1);
+      background: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--anthracite);
+      transition: border-color 140ms ease, transform 120ms ease;
+    }
+
+    .seat-actions button:hover { border-color: rgba(0, 137, 123, 0.4); }
+    .seat-actions button:active { transform: translateY(1px); }
+
+    .seat-value {
+      min-width: 38px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--anthracite);
+    }
+
+    .map {
+      position: relative;
+      flex: 1;
+      min-height: 340px;
+      background: linear-gradient(180deg, #20262d, #161c22);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .map::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 22px), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 22px);
+    }
+
+    .map .route {
+      position: absolute;
+      left: 18%;
+      right: 12%;
+      top: 24%;
+      height: 52%;
+      border: 4px solid rgba(255, 179, 0, 0.35);
+      border-radius: 32px;
+      box-shadow: 0 0 22px rgba(255, 179, 0, 0.35);
+      transform: rotate(-6deg);
+    }
+
+    .map .route::after {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.9), rgba(255, 179, 0, 0.6));
+      opacity: 0.8;
+    }
+
+    .map .poi {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 12px;
+      border: 3px solid var(--anthracite);
+      box-shadow: 0 0 16px rgba(0, 137, 123, 0.4);
+    }
+
+    .map .poi.start { background: var(--teal); left: 16%; top: 16%; }
+    .map .poi.end { background: var(--amber); right: 10%; bottom: 18%; }
+
+    .car {
+      position: absolute;
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--amber), var(--amber-strong));
+      color: var(--anthracite);
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 28px rgba(255, 179, 0, 0.35);
+      border: 3px solid #fff;
+      left: 42%;
+      top: 34%;
+      transform: rotate(-4deg);
+      animation: float 3.6s ease-in-out infinite;
+    }
+
+    .pulse {
+      position: absolute;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 137, 123, 0.2) 0%, transparent 60%);
+      left: 36%;
+      top: 28%;
+      filter: blur(0.6px);
+    }
+
+    .sheet {
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      border: 1px solid var(--cream-strong);
+      position: relative;
+      margin-top: auto;
+      box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .sheet .handle {
+      width: 52px;
+      height: 5px;
+      border-radius: 999px;
+      background: #d5d7dc;
+      margin: 0 auto 12px;
+    }
+
+    .sheet .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .sheet .driver-info {
+      display: grid;
+      gap: 6px;
+      color: var(--anthracite);
+    }
+
+    .sheet .driver-info strong { font-size: 16px; }
+    .sheet .driver-info span { color: var(--muted); font-size: 13px; }
+
+    .pill-actions {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pill-actions button {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 137, 123, 0.3);
+      color: var(--teal);
+      background: rgba(0, 137, 123, 0.06);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .dark-screen {
+      background: linear-gradient(180deg, #20262e, #10141b);
+      color: #fff;
+    }
+
+    @keyframes bg-pan {
+      0% { background-position: 0% 40%; }
+      50% { background-position: 80% 60%; }
+      100% { background-position: 0% 40%; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-8px) rotate(-2deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 22px 14px 48px; }
+      .hero p { font-size: 14px; }
+      .phone { width: 100%; }
+      .device-grid { grid-template-columns: 1fr; }
+      .sheet .row { flex-direction: column; align-items: flex-start; }
+      .pill-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <div class="badge">Academic Warmth & Modern Contrast · Mobile-first</div>
+      <h1>İYTE Yolculuk · Mobil UI Konsepti</h1>
+      <p>Modern, sıcak ve güven veren bir kampüs paylaşımlı yolculuk deneyimi. Renk paleti: Amber (#FFB300), Petrol (#00897B), Antrasit (#263238), Krem (#F5F5F6). Aşağıdaki maketler React Native tarzı bileşen hiyerarşisiyle, web üzerinde mobil ekran duyarlılığı korunarak oluşturuldu.</p>
+    </div>
+  </header>
+
+  <main class="canvas">
+    <div class="glow a"></div>
+    <div class="glow b"></div>
+    <section class="device-grid">
+      <!-- Login -->
+      <article class="phone dark-screen" data-animate>
+        <div class="phone-body">
+          <div class="status-dots">
+            <span class="dot active"></span>
+            <span class="dot teal"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="title">
+            <div class="logo-mark">IY</div>
+            <div>
+              <h2>İYTE Yolculuk</h2>
+              <p class="subtitle">Kampüs ve Gülbahçe arası güvenli, kurumsal giriş.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Kurumsal e-posta</label>
+            <input id="email" type="email" placeholder="@iyte.edu.tr" />
+          </div>
+          <button class="btn btn-primary">Giriş Yap</button>
+          <p class="subtitle">Güvenliğiniz için yalnızca @iyte.edu.tr hesapları desteklenir.</p>
+        </div>
+      </article>
+
+      <!-- Passenger Home -->
+      <article class="phone" data-animate>
+        <div class="phone-body">
+          <div class="status-dots">
+            <span class="dot teal"></span>
+            <span class="dot active"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="header">
+            <div class="greet">
+              <h3>Merhaba, Ayşe!</h3>
+              <span>Kampüs yolculuğu hazır</span>
+            </div>
+            <div class="avatar">
+              AY
+              <div class="star">4.8</div>
+            </div>
+          </div>
+          <div class="toggle" id="modeToggle">
+            <button class="active" data-mode="yolcu">Yolcu</button>
+            <button data-mode="surucu">Sürücü</button>
+          </div>
+          <div class="search">🔍 Nereye gidiyorsun?</div>
+          <div class="chip-row">
+            <div class="chip">Ev → Kampüs</div>
+            <div class="chip">Gülbahçe Meydan</div>
+            <div class="chip">Kütüphane</div>
+          </div>
+          <div class="section-title">Yaklaşan Yolculuklar</div>
+          <div class="cards">
+            <div class="ride-card">
+              <div class="ride-time">08:45</div>
+              <div class="timeline">
+                <span>Gülbahçe Meydan</span>
+                <span>İYTE Kütüphane</span>
+              </div>
+              <div class="action-col">
+                <div class="driver">
+                  <div class="mini-avatar">MY</div>
+                  Mehmet Y.
+                </div>
+                <div class="tag">⭐ 4.8 · 3 Koltuk</div>
+                <button class="btn btn-primary btn-small">İstek Gönder</button>
+              </div>
+            </div>
+            <div class="ride-card">
+              <div class="ride-time">09:10</div>
+              <div class="timeline">
+                <span>Urla Sahil</span>
+                <span>İYTE Mühendislik</span>
+              </div>
+              <div class="action-col">
+                <div class="driver">
+                  <div class="mini-avatar">DZ</div>
+                  Deniz Z.
+                </div>
+                <div class="tag">⭐ 4.9 · 2 Koltuk</div>
+                <button class="btn btn-primary btn-small">İstek Gönder</button>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar" id="tabbar">
+            <button class="active">
+              <div class="tab-icon"></div>
+              Ana Sayfa
+            </button>
+            <button>
+              <div class="tab-icon"></div>
+              Yolculuklarım
+            </button>
+            <button>
+              <div class="tab-icon"></div>
+              Profil
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Driver Create -->
+      <article class="phone" data-animate>
+        <div class="phone-body">
+          <div class="status-dots">
+            <span class="dot"></span>
+            <span class="dot teal"></span>
+            <span class="dot active"></span>
+          </div>
+          <div class="header">
+            <div class="greet">
+              <h3>Yeni İlan Oluştur</h3>
+              <span>Sürücü modu aktif</span>
+            </div>
+            <div class="pill">Sürücü</div>
+          </div>
+          <div class="form-card">
+            <div class="input-row">
+              <label for="from">Kalkış Noktası</label>
+              <div class="input-shell">
+                📍
+                <input id="from" type="text" placeholder="Gülbahçe Meydan" value="Gülbahçe Meydan">
+              </div>
+            </div>
+            <div class="input-row">
+              <label for="to">Varış Noktası</label>
+              <div class="input-shell">
+                🎯
+                <input id="to" type="text" placeholder="İYTE Kampüs" value="İYTE Kütüphane">
+              </div>
+            </div>
+            <div class="time-picker">
+              <div class="time-value" id="timeValue">08:30</div>
+              <input id="timeSlider" type="range" min="360" max="1260" step="5" value="510">
+            </div>
+            <div class="seat-row">
+              <div>
+                <div class="input-row">
+                  <label>Koltuk Sayısı</label>
+                  <div class="pill">Maks. 4 önerilir</div>
+                </div>
+              </div>
+              <div class="seat-actions">
+                <button id="seatMinus">−</button>
+                <div class="seat-value" id="seatValue">3</div>
+                <button id="seatPlus">+</button>
+              </div>
+            </div>
+            <div class="pill" style="justify-content:center; width:100%;">Ödeme: Masraf paylaşımı, nakit veya dijital</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%; margin-top:auto;">İlanı Yayınla</button>
+        </div>
+      </article>
+
+      <!-- Map / Live -->
+      <article class="phone" data-animate>
+        <div class="phone-body">
+          <div class="status-dots">
+            <span class="dot teal"></span>
+            <span class="dot"></span>
+            <span class="dot active"></span>
+          </div>
+          <div class="section-title" style="margin-bottom:4px;">Canlı İzleme</div>
+          <div class="map">
+            <div class="route"></div>
+            <div class="pulse"></div>
+            <div class="car" id="car">MY</div>
+            <div class="poi start"></div>
+            <div class="poi end"></div>
+          </div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="row">
+              <div class="driver-info">
+                <strong>Mehmet yolda · 5 dk</strong>
+                <span>Renault Clio · 35 ABC 123</span>
+              </div>
+              <div class="pill-actions">
+                <button>📞 Ara</button>
+                <button>💬 Mesaj</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
