@@ -102,20 +102,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     animateCar();
   }
-
-  // Hero/device parallax
-  const canvas = document.querySelector('.canvas');
-  let parallaxTick = 0;
-  if (canvas) {
-    window.addEventListener('pointermove', (e) => {
-      parallaxTick += 1;
-      if (parallaxTick % 2) return; // throttle
-      const x = (e.clientX / window.innerWidth - 0.5) * 10;
-      const y = (e.clientY / window.innerHeight - 0.5) * 6;
-      canvas.style.transform = `perspective(1200px) rotateY(${x}deg) rotateX(${y}deg)`;
-    });
-    window.addEventListener('pointerleave', () => {
-      canvas.style.transform = 'none';
-    });
-  }
 });

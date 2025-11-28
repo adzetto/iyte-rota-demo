@@ -401,11 +401,12 @@
       padding: 12px;
       border: 1px solid var(--cream-strong);
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 10px;
+      grid-template-columns: 76px 1fr 128px;
+      gap: 12px;
       align-items: center;
       box-shadow: 0 10px 24px rgba(17, 19, 23, 0.06);
       transition: transform 200ms ease, box-shadow 200ms ease;
+      overflow: hidden;
     }
 
     .ride-card:hover {
@@ -417,6 +418,8 @@
       color: var(--anthracite);
       font-weight: 700;
       font-size: 18px;
+      text-align: center;
+      width: 100%;
     }
 
     .timeline {
@@ -427,6 +430,7 @@
       color: var(--anthracite);
       font-weight: 600;
       font-size: 14px;
+      min-width: 0;
     }
 
     .timeline::before {
@@ -442,6 +446,10 @@
 
     .timeline span {
       position: relative;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .timeline span::before {
@@ -462,6 +470,7 @@
       color: var(--anthracite);
       font-weight: 700;
       font-size: 14px;
+      min-width: 0;
     }
 
     .driver .mini-avatar {
@@ -493,6 +502,7 @@
       display: grid;
       gap: 8px;
       justify-items: end;
+      align-content: center;
     }
 
     .btn-small {
