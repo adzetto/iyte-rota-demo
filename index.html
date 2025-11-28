@@ -102,6 +102,7 @@
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       justify-items: center;
       position: relative;
+      transition: transform 220ms ease;
     }
 
     .glow {
@@ -752,6 +753,134 @@
       color: #fff;
     }
 
+    /* Controls + portfolio chips */
+    .toolbar {
+      max-width: 1320px;
+      margin: 0 auto 14px;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 2fr 1fr;
+      align-items: center;
+    }
+
+    .toolbar .controls {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .mode-btn {
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #fff;
+      color: var(--anthracite);
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: background 140ms ease, box-shadow 160ms ease, transform 120ms ease;
+    }
+
+    .mode-btn:hover { box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12); }
+    .mode-btn:active { transform: translateY(1px); }
+    .mode-btn.active {
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.8), rgba(0, 137, 123, 0.12));
+      border-color: rgba(255, 179, 0, 0.4);
+      box-shadow: 0 14px 28px rgba(255, 179, 0, 0.26);
+    }
+
+    .chips-row {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .chip-pill {
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(0, 137, 123, 0.08);
+      border: 1px solid rgba(0, 137, 123, 0.16);
+      color: var(--anthracite);
+      font-weight: 700;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chip-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      opacity: 1;
+    }
+
+    /* Security cards */
+    .security-grid {
+      max-width: 1320px;
+      margin: 12px auto 26px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .security-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--cream-strong);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+      display: grid;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .security-card .title-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--anthracite);
+      letter-spacing: -0.01em;
+    }
+
+    .security-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .crest {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 179, 0, 0.18), rgba(0, 137, 123, 0.18));
+      border: 1px solid rgba(255, 179, 0, 0.3);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--anthracite);
+    }
+
+    /* Rail mode */
+    .device-grid.rail {
+      display: flex;
+      overflow-x: auto;
+      padding: 8px 4px 12px;
+      scroll-snap-type: x mandatory;
+      gap: 16px;
+    }
+
+    .device-grid.rail .phone {
+      min-width: 320px;
+      scroll-snap-align: start;
+    }
+
     @keyframes bg-pan {
       0% { background-position: 0% 40%; }
       50% { background-position: 80% 60%; }
@@ -785,6 +914,37 @@
       <p>Modern, sıcak ve güven veren bir kampüs paylaşımlı yolculuk deneyimi. Renk paleti: Amber (#FFB300), Petrol (#00897B), Antrasit (#263238), Krem (#F5F5F6). Aşağıdaki maketler React Native tarzı bileşen hiyerarşisiyle, web üzerinde mobil ekran duyarlılığı korunarak oluşturuldu.</p>
     </div>
   </header>
+
+  <section class="toolbar">
+    <div class="controls" id="viewControls">
+      <button class="mode-btn active" data-view="grid">Yan yana görünüm</button>
+      <button class="mode-btn" data-view="rail">Kaydırmalı tek ekran</button>
+    </div>
+    <div class="chips-row">
+      <div class="chip-pill"><span class="dot"></span> Kurumsal e-posta zorunlu</div>
+      <div class="chip-pill"><span class="dot"></span> Uçtan uca TLS + JWT oturum</div>
+      <div class="chip-pill"><span class="dot"></span> Canlı GPS + log denetimi</div>
+    </div>
+  </section>
+
+  <section class="security-grid">
+    <article class="security-card">
+      <div class="title-line"><span class="crest">ID</span>Kimlik Doğrulama</div>
+      <p>@iyte.edu.tr e-postası, token tabanlı oturum, cihaz parmak izi ve şüpheli oturum kilitleme akışları.</p>
+    </article>
+    <article class="security-card">
+      <div class="title-line"><span class="crest">Δ</span>Güvenli Rotalar</div>
+      <p>Canlı GPS, şifreli loglar, rotada sapma tespiti; gecikme ve mola alarmları için kural motoru.</p>
+    </article>
+    <article class="security-card">
+      <div class="title-line"><span class="crest">QA</span>Denetim & Score</div>
+      <p>PRN doğrulama, sürücü puanlama, otomatik davranış istatistikleri ve audit-ready veri saklama.</p>
+    </article>
+    <article class="security-card">
+      <div class="title-line"><span class="crest">UX</span>Portföy Tarzı</div>
+      <p>Ürün vitrini hissi: gölgeli kartlar, minimal grid, kaydırmalı tekil odak ve güçlü tipografi.</p>
+    </article>
+  </section>
 
   <main class="canvas">
     <div class="glow a"></div>

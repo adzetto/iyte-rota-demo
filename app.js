@@ -65,6 +65,24 @@ document.addEventListener('DOMContentLoaded', () => {
     syncSeats();
   }
 
+  // View controls: grid vs rail
+  const viewControls = document.getElementById('viewControls');
+  const deviceGrid = document.querySelector('.device-grid');
+  if (viewControls && deviceGrid) {
+    viewControls.addEventListener('click', (e) => {
+      const btn = e.target.closest('.mode-btn');
+      if (!btn) return;
+      viewControls.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.dataset.view;
+      if (view === 'rail') {
+        deviceGrid.classList.add('rail');
+      } else {
+        deviceGrid.classList.remove('rail');
+      }
+    });
+  }
+
   // Car animation along SVG route path
   const car = document.getElementById('car');
   const path = document.getElementById('routePath');
