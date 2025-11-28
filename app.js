@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!btn) return;
       tabbar.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
+      const target = btn.dataset.tabTarget;
+      const panels = document.querySelectorAll('.tab-sections > .panel');
+      panels.forEach((panel) => {
+        panel.classList.toggle('active', panel.dataset.tab === target);
+      });
     });
   }
 

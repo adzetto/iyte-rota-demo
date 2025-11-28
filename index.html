@@ -401,7 +401,7 @@
       padding: 12px;
       border: 1px solid var(--cream-strong);
       display: grid;
-      grid-template-columns: 76px 1fr 128px;
+      grid-template-columns: minmax(64px, 82px) minmax(0, 1fr) 132px;
       gap: 12px;
       align-items: center;
       box-shadow: 0 10px 24px rgba(17, 19, 23, 0.06);
@@ -471,6 +471,7 @@
       font-weight: 700;
       font-size: 14px;
       min-width: 0;
+      width: 100%;
     }
 
     .driver .mini-avatar {
@@ -503,6 +504,16 @@
       gap: 8px;
       justify-items: end;
       align-content: center;
+      width: 100%;
+    }
+
+    .tab-sections > .panel {
+      display: none;
+    }
+
+    .tab-sections > .panel.active {
+      display: grid;
+      gap: 12px;
     }
 
     .btn-small {
@@ -1012,49 +1023,88 @@
             <div class="chip">Gülbahçe Meydan</div>
             <div class="chip">Kütüphane</div>
           </div>
-          <div class="section-title">Yaklaşan Yolculuklar</div>
-          <div class="cards">
-            <div class="ride-card">
-              <div class="ride-time">08:45</div>
-              <div class="timeline">
-                <span>Gülbahçe Meydan</span>
-                <span>İYTE Kütüphane</span>
-              </div>
-              <div class="action-col">
-                <div class="driver">
-                  <div class="mini-avatar">MY</div>
-                  Mehmet Y.
+          <div class="tab-sections">
+            <div class="panel active" data-tab="home">
+              <div class="section-title">Yaklaşan Yolculuklar</div>
+              <div class="cards">
+                <div class="ride-card">
+                  <div class="ride-time">08:45</div>
+                  <div class="timeline">
+                    <span>Gülbahçe Meydan</span>
+                    <span>İYTE Kütüphane</span>
+                  </div>
+                  <div class="action-col">
+                    <div class="driver">
+                      <div class="mini-avatar">MY</div>
+                      Mehmet Y.
+                    </div>
+                    <div class="tag">⭐ 4.8 · 3 Koltuk</div>
+                    <button class="btn btn-primary btn-small book-btn">İstek Gönder</button>
+                  </div>
                 </div>
-                <div class="tag">⭐ 4.8 · 3 Koltuk</div>
-                <button class="btn btn-primary btn-small">İstek Gönder</button>
+                <div class="ride-card">
+                  <div class="ride-time">09:10</div>
+                  <div class="timeline">
+                    <span>Urla Sahil</span>
+                    <span>İYTE Mühendislik</span>
+                  </div>
+                    <div class="action-col">
+                    <div class="driver">
+                      <div class="mini-avatar">DZ</div>
+                      Deniz Z.
+                    </div>
+                    <div class="tag">⭐ 4.9 · 2 Koltuk</div>
+                    <button class="btn btn-primary btn-small book-btn">İstek Gönder</button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="ride-card">
-              <div class="ride-time">09:10</div>
-              <div class="timeline">
-                <span>Urla Sahil</span>
-                <span>İYTE Mühendislik</span>
-              </div>
-              <div class="action-col">
-                <div class="driver">
-                  <div class="mini-avatar">DZ</div>
-                  Deniz Z.
+            <div class="panel" data-tab="trips">
+              <div class="section-title">Yolculuklarım</div>
+              <div class="cards">
+                <div class="ride-card">
+                  <div class="ride-time">12:15</div>
+                  <div class="timeline">
+                    <span>İYTE Kütüphane</span>
+                    <span>Bornova Metro</span>
+                  </div>
+                  <div class="action-col">
+                    <div class="driver">
+                      <div class="mini-avatar">AY</div>
+                      Sen (Sürücü)
+                    </div>
+                    <div class="tag">3/3 Onaylı</div>
+                    <button class="btn btn-primary btn-small">Detay</button>
+                  </div>
                 </div>
-                <div class="tag">⭐ 4.9 · 2 Koltuk</div>
-                <button class="btn btn-primary btn-small">İstek Gönder</button>
+              </div>
+            </div>
+            <div class="panel" data-tab="profile">
+              <div class="section-title">Profil</div>
+              <div class="form-card">
+                <div class="driver">
+                  <div class="mini-avatar">AY</div>
+                  Ayşe Yılmaz
+                </div>
+                <div class="tag">⭐ 4.8 · 46 yolculuk</div>
+                <div class="chip-row">
+                  <div class="chip">Doğrulandı</div>
+                  <div class="chip">Ödeme: Kart</div>
+                  <div class="chip">Sürücü & Yolcu</div>
+                </div>
               </div>
             </div>
           </div>
           <div class="tabbar" id="tabbar">
-            <button class="active">
+            <button class="active" data-tab-target="home">
               <div class="tab-icon"></div>
               Ana Sayfa
             </button>
-            <button>
+            <button data-tab-target="trips">
               <div class="tab-icon"></div>
               Yolculuklarım
             </button>
-            <button>
+            <button data-tab-target="profile">
               <div class="tab-icon"></div>
               Profil
             </button>
@@ -1111,7 +1161,7 @@
             </div>
             <div class="pill" style="justify-content:center; width:100%;">Ödeme: Masraf paylaşımı, nakit veya dijital</div>
           </div>
-          <button class="btn btn-primary" style="width:100%; margin-top:auto;">İlanı Yayınla</button>
+            <button class="btn btn-primary" style="width:100%; margin-top:auto;">İlanı Yayınla</button>
         </div>
       </article>
 
