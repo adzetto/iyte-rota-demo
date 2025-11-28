@@ -59,14 +59,77 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', filter);
   }
 
-  // Bottom sheet toggle (live map)
+  // Draggable Bottom Sheet
   const liveSheet = document.getElementById('liveSheet');
   if (liveSheet) {
     const handle = liveSheet.querySelector('.handle');
-    const toggle = () => {
-      liveSheet.classList.toggle('collapsed');
+    let isDragging = false;
+    let startY = 0;
+    let currentY = 0;
+    let initialTranslateY = 0;
+
+    // Helper to get current translation
+    const getTranslateY = () => {
+      if (liveSheet.classList.contains('collapsed')) {
+        return liveSheet.offsetHeight * 0.55; // 55%
+      }
+      return 0;
     };
-    if (handle) handle.addEventListener('click', toggle);
+
+    const onPointerDown = (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      initialTranslateY = getTranslateY();
+      liveSheet.classList.add('dragging');
+      liveSheet.setPointerCapture(e.pointerId);
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const deltaY = e.clientY - startY;
+      currentY = initialTranslateY + deltaY;
+
+      // Clamp values (don't drag too far up)
+      // minimal resistance going up past 0
+      if (currentY < 0) currentY = currentY * 0.3;
+
+      liveSheet.style.transform = `translateY(${currentY}px)`;
+    };
+
+    const onPointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      liveSheet.classList.remove('dragging');
+      liveSheet.releasePointerCapture(e.pointerId);
+      liveSheet.style.transform = ''; // Clear inline style to let CSS class take over
+
+      const deltaY = e.clientY - startY;
+      const threshold = 50; // px to trigger snap
+
+      // Logic:
+      // If was collapsed and dragged up > threshold -> Expand
+      // If was expanded and dragged down > threshold -> Collapse
+      // Otherwise revert
+
+      const isCollapsed = liveSheet.classList.contains('collapsed');
+
+      if (isCollapsed) {
+        if (deltaY < -threshold) {
+          liveSheet.classList.remove('collapsed');
+        }
+      } else {
+        if (deltaY > threshold) {
+          liveSheet.classList.add('collapsed');
+        }
+      }
+    };
+
+    if (handle) {
+      liveSheet.addEventListener('pointerdown', onPointerDown);
+      liveSheet.addEventListener('pointermove', onPointerMove);
+      liveSheet.addEventListener('pointerup', onPointerUp);
+      liveSheet.addEventListener('pointercancel', onPointerUp);
+    }
   }
 
   // Time slider -> human readable time
@@ -121,23 +184,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime = null;
     const duration = 9000; // 9s loop
     const length = path.getTotalLength();
-    
+
     const animateCar = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
       const cycle = (elapsed % duration) / duration;
-      
+
       // Get point at current length
       const point = path.getPointAtLength(length * cycle);
-      
+
       // SVG viewBox is 360x420. Convert to percentage for CSS positioning
       // This assumes the SVG scales uniformly within its container
       const xPct = (point.x / 360) * 100;
       const yPct = (point.y / 420) * 100;
-      
+
       car.style.left = `${xPct}%`;
       car.style.top = `${yPct}%`;
-      
+
       requestAnimationFrame(animateCar);
     };
     requestAnimationFrame(animateCar);

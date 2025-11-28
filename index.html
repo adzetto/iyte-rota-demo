@@ -1,21 +1,25 @@
 <!doctype html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>İYTE Yolculuk UI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --amber: #ffb300;
-      --amber-strong: #ff8f00; /* Richer amber */
+      --amber-strong: #ff8f00;
+      /* Richer amber */
       --teal: #00897b;
       --teal-soft: #4db6ac;
       --anthracite: #263238;
       --anthracite-soft: #37474f;
-      --cream: rgba(245, 245, 246, 0.85); /* Translucent for glassmorphism */
+      --cream: rgba(245, 245, 246, 0.85);
+      /* Translucent for glassmorphism */
       --cream-strong: #ececf0;
       --muted: #546e7a;
       --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -24,7 +28,9 @@
       --radius-md: 20px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -60,7 +66,12 @@
       z-index: 0;
     }
 
-    .hero-content { position: relative; z-index: 1; display: grid; gap: 12px; }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 12px;
+    }
 
     .badge {
       display: inline-flex;
@@ -116,8 +127,17 @@
       z-index: 0;
     }
 
-    .glow.a { background: rgba(255, 179, 0, 0.26); left: -40px; top: 10%; }
-    .glow.b { background: rgba(0, 137, 123, 0.26); right: -60px; bottom: 6%; }
+    .glow.a {
+      background: rgba(255, 179, 0, 0.26);
+      left: -40px;
+      top: 10%;
+    }
+
+    .glow.b {
+      background: rgba(0, 137, 123, 0.26);
+      right: -60px;
+      bottom: 6%;
+    }
 
     .phone {
       width: min(440px, 100%);
@@ -126,7 +146,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-radius: var(--radius-lg);
       padding: 24px 20px;
-      box-shadow: var(--shadow), 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow), 0 8px 24px rgba(0, 0, 0, 0.1);
       border: var(--glass-border);
       position: relative;
       overflow: hidden;
@@ -185,8 +205,15 @@
       opacity: 0.2;
     }
 
-    .dot.active { opacity: 0.8; background: var(--amber); }
-    .dot.teal { background: var(--teal); opacity: 0.7; }
+    .dot.active {
+      opacity: 0.8;
+      background: var(--amber);
+    }
+
+    .dot.teal {
+      background: var(--teal);
+      opacity: 0.7;
+    }
 
     .logo-mark {
       width: 56px;
@@ -271,7 +298,9 @@
       transition: transform 120ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    .btn:active { transform: translateY(1px); }
+    .btn:active {
+      transform: translateY(1px);
+    }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--amber), var(--amber-strong));
@@ -306,7 +335,10 @@
       letter-spacing: -0.01em;
     }
 
-    .greet span { color: var(--muted); font-size: 13px; }
+    .greet span {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
     .avatar {
       width: 44px;
@@ -511,11 +543,11 @@
       width: 100%;
     }
 
-    .tab-sections > .panel {
+    .tab-sections>.panel {
       display: none;
     }
 
-    .tab-sections > .panel.active {
+    .tab-sections>.panel.active {
       display: grid;
       gap: 12px;
     }
@@ -560,7 +592,9 @@
       background: var(--cream-strong);
     }
 
-    .tabbar button.active .tab-icon { background: var(--amber); }
+    .tabbar button.active .tab-icon {
+      background: var(--amber);
+    }
 
     .section-title {
       margin: 6px 0 2px;
@@ -680,8 +714,13 @@
       transition: border-color 140ms ease, transform 120ms ease;
     }
 
-    .seat-actions button:hover { border-color: rgba(0, 137, 123, 0.4); }
-    .seat-actions button:active { transform: translateY(1px); }
+    .seat-actions button:hover {
+      border-color: rgba(0, 137, 123, 0.4);
+    }
+
+    .seat-actions button:active {
+      transform: translateY(1px);
+    }
 
     .seat-value {
       min-width: 38px;
@@ -749,8 +788,15 @@
       position: relative;
       margin-top: auto;
       box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.18);
-      transition: transform 240ms ease, box-shadow 240ms ease;
+      transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 240ms ease;
       transform: translateY(0);
+      touch-action: none;
+      /* Prevent scroll while dragging */
+    }
+
+    .sheet.dragging {
+      transition: none;
+      cursor: grabbing;
     }
 
     .sheet .handle {
@@ -759,6 +805,7 @@
       border-radius: 999px;
       background: #d5d7dc;
       margin: 0 auto 12px;
+      cursor: grab;
     }
 
     .sheet .row {
@@ -774,8 +821,14 @@
       color: var(--anthracite);
     }
 
-    .sheet .driver-info strong { font-size: 16px; }
-    .sheet .driver-info span { color: var(--muted); font-size: 13px; }
+    .sheet .driver-info strong {
+      font-size: 16px;
+    }
+
+    .sheet .driver-info span {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
     .pill-actions {
       display: inline-flex;
@@ -834,8 +887,14 @@
       transition: background 140ms ease, box-shadow 160ms ease, transform 120ms ease;
     }
 
-    .mode-btn:hover { box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12); }
-    .mode-btn:active { transform: translateY(1px); }
+    .mode-btn:hover {
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+    }
+
+    .mode-btn:active {
+      transform: translateY(1px);
+    }
+
     .mode-btn.active {
       background: linear-gradient(135deg, rgba(255, 179, 0, 0.8), rgba(0, 137, 123, 0.12));
       border-color: rgba(255, 179, 0, 0.4);
@@ -948,26 +1007,62 @@
     }
 
     @keyframes bg-pan {
-      0% { background-position: 0% 40%; }
-      50% { background-position: 80% 60%; }
-      100% { background-position: 0% 40%; }
+      0% {
+        background-position: 0% 40%;
+      }
+
+      50% {
+        background-position: 80% 60%;
+      }
+
+      100% {
+        background-position: 0% 40%;
+      }
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(-4deg); }
-      50% { transform: translateY(-8px) rotate(-2deg); }
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-4deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(-2deg);
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+      * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition: none !important;
+      }
     }
 
     @media (max-width: 720px) {
-      body { padding: 22px 14px 48px; }
-      .phone { width: 100%; }
-      .device-grid { grid-template-columns: 1fr; }
-      .sheet .row { flex-direction: column; align-items: flex-start; }
-      .pill-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      body {
+        padding: 22px 14px 48px;
+      }
+
+      .phone {
+        width: 100%;
+      }
+
+      .device-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sheet .row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .pill-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
     }
 
     @media (min-width: 1100px) {
@@ -977,6 +1072,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="bg3d"></div>
   <div class="bg-mask"></div>
@@ -1069,7 +1165,8 @@
             <button data-mode="surucu">Sürücü</button>
           </div>
           <div class="search">
-            <input id="searchInput" type="text" placeholder="🔍 Nereye gidiyorsun?" style="border:none;outline:none;width:100%;background:transparent;font-weight:600;font-size:14px;color:var(--muted);" />
+            <input id="searchInput" type="text" placeholder="🔍 Nereye gidiyorsun?"
+              style="border:none;outline:none;width:100%;background:transparent;font-weight:600;font-size:14px;color:var(--muted);" />
           </div>
           <div class="chip-row">
             <div class="chip">Ev → Kampüs</div>
@@ -1101,7 +1198,7 @@
                     <span>Urla Sahil</span>
                     <span>İYTE Mühendislik</span>
                   </div>
-                    <div class="action-col">
+                  <div class="action-col">
                     <div class="driver">
                       <div class="mini-avatar">DZ</div>
                       Deniz Z.
@@ -1212,9 +1309,10 @@
                 <button id="seatPlus">+</button>
               </div>
             </div>
-            <div class="pill" style="justify-content:center; width:100%;">Ödeme: Masraf paylaşımı, nakit veya dijital</div>
+            <div class="pill" style="justify-content:center; width:100%;">Ödeme: Masraf paylaşımı, nakit veya dijital
+            </div>
           </div>
-            <button class="btn btn-primary" style="width:100%; margin-top:auto;">İlanı Yayınla</button>
+          <button class="btn btn-primary" style="width:100%; margin-top:auto;">İlanı Yayınla</button>
         </div>
       </article>
 
@@ -1231,32 +1329,44 @@
             <svg viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="roadGradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#2d363f"/>
-                  <stop offset="100%" stop-color="#1f2730"/>
+                  <stop offset="0%" stop-color="#2d363f" />
+                  <stop offset="100%" stop-color="#1f2730" />
                 </linearGradient>
                 <linearGradient id="routeGlow" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#ffb300"/>
-                  <stop offset="100%" stop-color="#f59f00"/>
+                  <stop offset="0%" stop-color="#ffb300" />
+                  <stop offset="100%" stop-color="#f59f00" />
                 </linearGradient>
                 <filter id="routeShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ffb300" flood-opacity="0.45"/>
+                  <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ffb300" flood-opacity="0.45" />
                 </filter>
               </defs>
-              <rect x="0" y="0" width="360" height="420" fill="#1c232a"/>
-              <rect x="34" y="44" width="210" height="150" rx="26" fill="#0f2c29" opacity="0.65"/>
-              <rect x="86" y="140" width="200" height="120" rx="28" fill="#113431" opacity="0.5"/>
-              <path d="M30 60 h300" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
-              <path d="M60 30 v340" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
-              <path d="M110 80 v280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
-              <path d="M320 90 v240" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
-              <path d="M40 220 h280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
-              <path id="routePath" d="M95 320 C 110 250, 150 240, 175 220 C 210 195, 235 170, 248 132 C 260 94, 285 92, 302 112 C 316 128, 316 170, 298 196 C 278 224, 245 246, 212 260 C 180 274, 142 292, 116 330" fill="none" stroke="url(#routeGlow)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#routeShadow)"/>
-              <circle cx="95" cy="320" r="10" fill="#00897b" stroke="#0c1a1f" stroke-width="4"/>
-              <circle cx="302" cy="112" r="10" fill="#ffb300" stroke="#0c1a1f" stroke-width="4"/>
-              <text x="70" y="120" fill="#dbe6ea" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.8">İYTE Kampüsü</text>
-              <text x="210" y="180" fill="#c9d6d9" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.8">Kütüphane</text>
-              <text x="62" y="344" fill="#d1e7e4" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Gülbahçe Meydan</text>
-              <text x="278" y="96" fill="#ffe7b3" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Mühendislik</text>
+              <rect x="0" y="0" width="360" height="420" fill="#1c232a" />
+              <rect x="34" y="44" width="210" height="150" rx="26" fill="#0f2c29" opacity="0.65" />
+              <rect x="86" y="140" width="200" height="120" rx="28" fill="#113431" opacity="0.5" />
+              <path d="M30 60 h300" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round"
+                opacity="0.6" />
+              <path d="M60 30 v340" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round"
+                opacity="0.55" />
+              <path d="M110 80 v280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round"
+                opacity="0.55" />
+              <path d="M320 90 v240" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round"
+                opacity="0.55" />
+              <path d="M40 220 h280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round"
+                opacity="0.55" />
+              <path id="routePath"
+                d="M95 320 C 110 250, 150 240, 175 220 C 210 195, 235 170, 248 132 C 260 94, 285 92, 302 112 C 316 128, 316 170, 298 196 C 278 224, 245 246, 212 260 C 180 274, 142 292, 116 330"
+                fill="none" stroke="url(#routeGlow)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"
+                filter="url(#routeShadow)" />
+              <circle cx="95" cy="320" r="10" fill="#00897b" stroke="#0c1a1f" stroke-width="4" />
+              <circle cx="302" cy="112" r="10" fill="#ffb300" stroke="#0c1a1f" stroke-width="4" />
+              <text x="70" y="120" fill="#dbe6ea" font-family="Space Grotesk, sans-serif" font-size="12"
+                opacity="0.8">İYTE Kampüsü</text>
+              <text x="210" y="180" fill="#c9d6d9" font-family="Space Grotesk, sans-serif" font-size="12"
+                opacity="0.8">Kütüphane</text>
+              <text x="62" y="344" fill="#d1e7e4" font-family="Space Grotesk, sans-serif" font-size="12"
+                opacity="0.9">Gülbahçe Meydan</text>
+              <text x="278" y="96" fill="#ffe7b3" font-family="Space Grotesk, sans-serif" font-size="12"
+                opacity="0.9">Mühendislik</text>
             </svg>
             <div class="car-3d" data-color="#ffb300"></div>
             <div class="car" id="car">MY</div>
@@ -1283,4 +1393,5 @@
   <script type="module" src="three-bg.js"></script>
   <script type="module" src="car-3d.js"></script>
 </body>
+
 </html>
