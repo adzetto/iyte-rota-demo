@@ -91,13 +91,14 @@
     }
 
     .canvas {
-      max-width: 1300px;
+      max-width: 1320px;
       margin: 0 auto;
+      padding: 8px;
     }
 
     .device-grid {
       display: grid;
-      gap: 20px;
+      gap: 22px;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       justify-items: center;
       position: relative;
@@ -117,17 +118,17 @@
     .glow.b { background: rgba(0, 137, 123, 0.26); right: -60px; bottom: 6%; }
 
     .phone {
-      width: min(360px, 100%);
+      width: min(380px, 100%);
       background: var(--cream);
       border-radius: var(--radius-lg);
-      padding: 18px 16px 16px;
+      padding: 22px 18px 20px;
       box-shadow: var(--shadow), 0 12px 30px rgba(0, 0, 0, 0.28);
       border: 1px solid rgba(255, 255, 255, 0.06);
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       transform: translateY(36px) scale(0.98);
       opacity: 0;
       transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease;
@@ -161,7 +162,7 @@
       z-index: 1;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       height: 100%;
     }
 
@@ -390,7 +391,7 @@
     .cards {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     .ride-card {
@@ -667,52 +668,18 @@
     .map {
       position: relative;
       flex: 1;
-      min-height: 340px;
-      background: linear-gradient(180deg, #20262d, #161c22);
+      min-height: 380px;
+      background: linear-gradient(180deg, #1e252c, #141a21);
       border-radius: var(--radius-md);
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    .map::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 22px), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 22px);
+    .map svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
-
-    .map .route {
-      position: absolute;
-      left: 18%;
-      right: 12%;
-      top: 24%;
-      height: 52%;
-      border: 4px solid rgba(255, 179, 0, 0.35);
-      border-radius: 32px;
-      box-shadow: 0 0 22px rgba(255, 179, 0, 0.35);
-      transform: rotate(-6deg);
-    }
-
-    .map .route::after {
-      content: '';
-      position: absolute;
-      inset: 10px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(255, 179, 0, 0.9), rgba(255, 179, 0, 0.6));
-      opacity: 0.8;
-    }
-
-    .map .poi {
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border-radius: 12px;
-      border: 3px solid var(--anthracite);
-      box-shadow: 0 0 16px rgba(0, 137, 123, 0.4);
-    }
-
-    .map .poi.start { background: var(--teal); left: 16%; top: 16%; }
-    .map .poi.end { background: var(--amber); right: 10%; bottom: 18%; }
 
     .car {
       position: absolute;
@@ -726,21 +693,8 @@
       place-items: center;
       box-shadow: 0 18px 28px rgba(255, 179, 0, 0.35);
       border: 3px solid #fff;
-      left: 42%;
-      top: 34%;
-      transform: rotate(-4deg);
+      transform: translate(-50%, -50%) rotate(-4deg);
       animation: float 3.6s ease-in-out infinite;
-    }
-
-    .pulse {
-      position: absolute;
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 137, 123, 0.2) 0%, transparent 60%);
-      left: 36%;
-      top: 28%;
-      filter: blur(0.6px);
     }
 
     .sheet {
@@ -1001,11 +955,37 @@
           </div>
           <div class="section-title" style="margin-bottom:4px;">Canlı İzleme</div>
           <div class="map">
-            <div class="route"></div>
-            <div class="pulse"></div>
+            <svg viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="roadGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#2d363f"/>
+                  <stop offset="100%" stop-color="#1f2730"/>
+                </linearGradient>
+                <linearGradient id="routeGlow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffb300"/>
+                  <stop offset="100%" stop-color="#f59f00"/>
+                </linearGradient>
+                <filter id="routeShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ffb300" flood-opacity="0.45"/>
+                </filter>
+              </defs>
+              <rect x="0" y="0" width="360" height="420" fill="#1c232a"/>
+              <rect x="34" y="44" width="210" height="150" rx="26" fill="#0f2c29" opacity="0.65"/>
+              <rect x="86" y="140" width="200" height="120" rx="28" fill="#113431" opacity="0.5"/>
+              <path d="M30 60 h300" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+              <path d="M60 30 v340" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+              <path d="M110 80 v280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+              <path d="M320 90 v240" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+              <path d="M40 220 h280" stroke="url(#roadGradient)" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+              <path id="routePath" d="M95 320 C 110 250, 150 240, 175 220 C 210 195, 235 170, 248 132 C 260 94, 285 92, 302 112 C 316 128, 316 170, 298 196 C 278 224, 245 246, 212 260 C 180 274, 142 292, 116 330" fill="none" stroke="url(#routeGlow)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#routeShadow)"/>
+              <circle cx="95" cy="320" r="10" fill="#00897b" stroke="#0c1a1f" stroke-width="4"/>
+              <circle cx="302" cy="112" r="10" fill="#ffb300" stroke="#0c1a1f" stroke-width="4"/>
+              <text x="70" y="120" fill="#dbe6ea" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.8">İYTE Kampüsü</text>
+              <text x="210" y="180" fill="#c9d6d9" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.8">Kütüphane</text>
+              <text x="62" y="344" fill="#d1e7e4" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Gülbahçe Meydan</text>
+              <text x="278" y="96" fill="#ffe7b3" font-family="Space Grotesk, sans-serif" font-size="12" opacity="0.9">Mühendislik</text>
+            </svg>
             <div class="car" id="car">MY</div>
-            <div class="poi start"></div>
-            <div class="poi end"></div>
           </div>
           <div class="sheet">
             <div class="handle"></div>

@@ -65,25 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
     syncSeats();
   }
 
-  // Car path animation (ellipse)
+  // Car animation along SVG route path
   const car = document.getElementById('car');
-  if (car) {
+  const path = document.getElementById('routePath');
+  if (car && path) {
+    const length = path.getTotalLength();
     const animateCar = () => {
-      let last = performance.now();
-      const loop = (now) => {
-        const delta = now - last;
-        last = now;
-        const cycle = (now % 7000) / 7000; // 7s loop
-        const angle = cycle * Math.PI * 2;
-        const radiusX = 22;
-        const radiusY = 16;
-        const x = 50 + radiusX * Math.cos(angle);
-        const y = 50 + radiusY * Math.sin(angle);
-        car.style.left = `${x}%`;
-        car.style.top = `${y}%`;
-        requestAnimationFrame(loop);
-      };
-      requestAnimationFrame(loop);
+      const now = performance.now();
+      const cycle = (now % 9000) / 9000; // 9s loop
+      const distance = length * cycle;
+      const point = path.getPointAtLength(distance);
+      // convert SVG coords (viewBox 360x420) to %
+      const xPct = (point.x / 360) * 100;
+      const yPct = (point.y / 420) * 100;
+      car.style.left = `${xPct}%`;
+      car.style.top = `${yPct}%`;
+      requestAnimationFrame(animateCar);
     };
     animateCar();
   }
